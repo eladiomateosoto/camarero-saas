@@ -1,20 +1,10 @@
-import { initializeApp, getApps } from "firebase/app";
-import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
+import { initializeApp, getApps, cert } from "firebase-admin/app";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
-const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY,
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.VITE_FIREBASE_APP_ID,
-};
-
-function getApp() {
-  if (getApps().length === 0) {
-    return initializeApp(firebaseConfig);
-  }
-  return getApps()[0];
+function getAdminApp() {
+  if (getApps().length > 0) return getApps()[0];
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  return initializeApp({ credential: cert(serviceAccount) });
 }
 
 export default async function handler(req, res) {
@@ -29,74 +19,56 @@ export default async function handler(req, res) {
   }
 
   try {
-    const app = getApp();
-    const db = getFirestore(app);
+    getAdminApp();
+    const db = getFirestore();
 
-    // Obtener datos del restaurante (token telegram)
-    const restSnap = await getDoc(doc(db, "restaurantes", restauranteId));
-    if (!restSnap.exists()) {
+    const restSnap = await db.collection("restaurantes").doc(restauranteId).get();
+    if (!restSnap.exists) {
       return res.status(404).json({ error: "Restaurante no encontrado" });
     }
-    const restData = restSnap.data();
-    const { telegramToken, telegramChatId } = restData;
+    const { telegramToken, telegramChatId } = restSnap.data();
 
-    const mesaRef = doc(db, "restaurantes", restauranteId, "mesas", String(mesa));
-    const mesaSnap = await getDoc(mesaRef);
-    const mesaData = mesaSnap.exists() ? mesaSnap.data() : {};
+    const mesaRef = db
+      .collection("restaurantes")
+      .doc(restauranteId)
+      .collection("mesas")
+      .doc(String(mesa));
 
+    const mesaSnap = await mesaRef.get();
+    const mesaData = mesaSnap.exists ? mesaSnap.data() : {};
     const nuevoTotal = (mesaData.total || 0) + total;
-    const ahora = serverTimestamp();
+    const ahora = FieldValue.serverTimestamp();
 
-    // Actualizar/crear documento de mesa
     if (mesaData.estado === "ocupada") {
-      await updateDoc(mesaRef, {
-        total: nuevoTotal,
-        ultimaComanda: ahora,
-      });
+      await mesaRef.update({ total: nuevoTotal, ultimaComanda: ahora });
     } else {
-      await setDoc(mesaRef, {
+      await mesaRef.set({
         estado: "ocupada",
         clienteNombre: nombre,
-        personas: personas,
+        personas,
         total: nuevoTotal,
         abiertaEn: ahora,
         ultimaComanda: ahora,
       });
     }
 
-    // Guardar comanda
-    await addDoc(collection(db, "restaurantes", restauranteId, "mesas", String(mesa), "comandas"), {
+    await mesaRef.collection("comandas").add({
       items,
       total,
       creadaEn: ahora,
     });
 
-    // Enviar a Telegram
     if (telegramToken && telegramChatId) {
       const itemsText = items
-        .map((item) => `  • ${item.nombre} x${item.cantidad} — ${((item.precio || 0) * item.cantidad).toFixed(2)}€`)
+        .map((i) => `  • ${i.nombre} x${i.cantidad} — ${((i.precio || 0) * i.cantidad).toFixed(2)}€`)
         .join("\n");
 
-      const mensaje = `🍽️ NUEVA COMANDA
-━━━━━━━━━━━━━━━━━━
-📍 Mesa: ${mesa}
-👤 Cliente: ${nombre}
-👥 Personas: ${personas}
-━━━━━━━━━━━━━━━━━━
-🛒 Pedido:
-${itemsText}
-━━━━━━━━━━━━━━━━━━
-💶 Total: ${total.toFixed(2)}€`;
+      const mensaje = `🍽️ NUEVA COMANDA\n━━━━━━━━━━━━━━━━━━\n📍 Mesa: ${mesa}\n👤 Cliente: ${nombre}\n👥 Personas: ${personas}\n━━━━━━━━━━━━━━━━━━\n🛒 Pedido:\n${itemsText}\n━━━━━━━━━━━━━━━━━━\n💶 Total: ${total.toFixed(2)}€`;
 
-      const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
-      await fetch(telegramUrl, {
+      await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: telegramChatId,
-          text: mensaje,
-          parse_mode: "HTML",
-        }),
+        body: JSON.stringify({ chat_id: telegramChatId, text: mensaje }),
       });
     }
 
