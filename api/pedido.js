@@ -19,8 +19,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    getAdminApp();
-    const db = getFirestore();
+    const app = getAdminApp();
+    const db = getFirestore(app);
 
     const restSnap = await db.collection("restaurantes").doc(restauranteId).get();
     if (!restSnap.exists) {
