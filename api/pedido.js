@@ -2,31 +2,60 @@ import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 function getAdminApp() {
-  if (getApps().length > 0) return getApps()[0];
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  if (getApps().length > 0) {
+    console.log("[pedido] Reutilizando app Firebase existente");
+    return getApps()[0];
+  }
+  console.log("[pedido] Inicializando nueva app Firebase Admin");
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+  if (!raw) throw new Error("FIREBASE_SERVICE_ACCOUNT no está definida");
+  const serviceAccount = JSON.parse(raw);
+  console.log("[pedido] project_id del service account:", serviceAccount.project_id);
   return initializeApp({ credential: cert(serviceAccount) });
 }
 
 export default async function handler(req, res) {
+  console.log("[pedido] Método:", req.method);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { restauranteId, mesa, nombre, personas, items, total } = req.body;
+  const body = req.body;
+  console.log("[pedido] Body recibido:", JSON.stringify(body));
+
+  const { restauranteId, mesa, nombre, personas, items, total } = body;
 
   if (!restauranteId || !mesa || !items) {
-    return res.status(400).json({ error: "Faltan campos requeridos" });
+    return res.status(400).json({ error: "Faltan campos requeridos", recibido: { restauranteId, mesa, items } });
   }
 
   try {
     const app = getAdminApp();
     const db = getFirestore(app);
+    console.log("[pedido] Firestore inicializado");
 
-    const restSnap = await db.collection("restaurantes").doc(restauranteId).get();
+    console.log("[pedido] Buscando restaurante:", restauranteId);
+    const restRef = db.collection("restaurantes").doc(restauranteId);
+    console.log("[pedido] Path del documento:", restRef.path);
+
+    const restSnap = await restRef.get();
+    console.log("[pedido] restSnap.exists:", restSnap.exists);
+
     if (!restSnap.exists) {
-      return res.status(404).json({ error: "Restaurante no encontrado" });
+      // Listar documentos existentes para diagnóstico
+      const colSnap = await db.collection("restaurantes").limit(5).get();
+      const existentes = colSnap.docs.map((d) => d.id);
+      console.log("[pedido] Documentos en 'restaurantes':", existentes);
+      return res.status(404).json({
+        error: "Restaurante no encontrado",
+        buscado: restauranteId,
+        existentes,
+      });
     }
+
     const { telegramToken, telegramChatId } = restSnap.data();
+    console.log("[pedido] Restaurante encontrado. Telegram configurado:", !!(telegramToken && telegramChatId));
 
     const mesaRef = db
       .collection("restaurantes")
@@ -52,11 +81,8 @@ export default async function handler(req, res) {
       });
     }
 
-    await mesaRef.collection("comandas").add({
-      items,
-      total,
-      creadaEn: ahora,
-    });
+    await mesaRef.collection("comandas").add({ items, total, creadaEn: ahora });
+    console.log("[pedido] Comanda guardada en Firestore");
 
     if (telegramToken && telegramChatId) {
       const itemsText = items
@@ -65,16 +91,17 @@ export default async function handler(req, res) {
 
       const mensaje = `🍽️ NUEVA COMANDA\n━━━━━━━━━━━━━━━━━━\n📍 Mesa: ${mesa}\n👤 Cliente: ${nombre}\n👥 Personas: ${personas}\n━━━━━━━━━━━━━━━━━━\n🛒 Pedido:\n${itemsText}\n━━━━━━━━━━━━━━━━━━\n💶 Total: ${total.toFixed(2)}€`;
 
-      await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+      const tgRes = await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chat_id: telegramChatId, text: mensaje }),
       });
+      console.log("[pedido] Telegram status:", tgRes.status);
     }
 
     return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: err.message });
+    console.error("[pedido] ERROR:", err.message, err.stack);
+    return res.status(500).json({ error: err.message, stack: err.stack?.split("\n").slice(0, 5) });
   }
 }
