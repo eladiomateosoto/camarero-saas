@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{path=**}/comandas/{comandaId} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /restaurantes/{restauranteId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+
+      match /mesas/{mesaId} {
+        allow read, write: if request.auth != null;
+
+        match /comandas/{comandaId} {
+          allow read, write: if request.auth != null;
+        }
+      }
+
+      match /historico/{docId} {
+        allow read, write: if request.auth != null;
+      }
+
+      match /carta/{docId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && request.auth.token.email == "eladiomateosoto@gmail.com";
+      }
+
+      match /config/{docId} {
+        allow read, write: if request.auth != null;
+      }
+
+      match /reservas/{reservaId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null;
+      }
+    }
+  }
+}

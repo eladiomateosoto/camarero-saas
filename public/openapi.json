@@ -1,0 +1,193 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CamareroAI API",
+    "description": "API para gestión de comandas, mesas y reservas en restaurantes",
+    "version": "2.0.0"
+  },
+  "servers": [{ "url": "https://camarero-saas.vercel.app" }],
+  "paths": {
+    "/api/pedido": {
+      "post": {
+        "operationId": "crearPedido",
+        "summary": "Crear una nueva comanda en una mesa",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["restauranteId", "mesa", "nombre", "personas", "items", "total"],
+                "properties": {
+                  "restauranteId": { "type": "string" },
+                  "mesa": { "type": "integer" },
+                  "nombre": { "type": "string" },
+                  "personas": { "type": "integer" },
+                  "items": { "type": "array", "items": { "type": "object", "properties": { "nombre": { "type": "string" }, "cantidad": { "type": "integer" }, "precio": { "type": "number" } } } },
+                  "total": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Comanda creada" },
+          "400": { "description": "Faltan campos" },
+          "404": { "description": "Restaurante no encontrado" }
+        }
+      }
+    },
+    "/api/marchar": {
+      "post": {
+        "operationId": "marcharPedidos",
+        "summary": "Marcar todos los pedidos pendientes de una mesa como servidos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["restauranteId", "mesa"],
+                "properties": {
+                  "restauranteId": { "type": "string" },
+                  "mesa": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pedidos servidos", "content": { "application/json": { "schema": { "type": "object", "properties": { "ok": { "type": "boolean" }, "servidas": { "type": "integer" } } } } } }
+        }
+      }
+    },
+    "/api/cerrar-mesa": {
+      "post": {
+        "operationId": "cerrarMesa",
+        "summary": "Cerrar una mesa y guardar en histórico",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["restauranteId", "mesa"],
+                "properties": {
+                  "restauranteId": { "type": "string" },
+                  "mesa": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Mesa cerrada" }
+        }
+      }
+    },
+    "/api/estado-mesa": {
+      "get": {
+        "operationId": "estadoMesa",
+        "summary": "Consultar el estado actual de una mesa con todos sus pedidos",
+        "parameters": [
+          { "name": "restauranteId", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "mesa", "in": "query", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estado de la mesa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "mesa": { "type": "object", "properties": { "id": { "type": "string" }, "estado": { "type": "string", "enum": ["libre", "ocupada", "pagando", "reservada"] }, "clienteNombre": { "type": "string" }, "personas": { "type": "integer" }, "total": { "type": "number" }, "abiertaEn": { "type": "string" } } },
+                    "comandas": { "type": "object", "properties": { "total": { "type": "integer" }, "pendientes": { "type": "integer" }, "servidas": { "type": "integer" }, "lista": { "type": "array" } } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reserva": {
+      "post": {
+        "operationId": "crearReserva",
+        "summary": "Crear una nueva reserva de mesa",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["restauranteId", "nombre", "personas", "fecha", "turno", "hora"],
+                "properties": {
+                  "restauranteId": { "type": "string", "description": "ID del restaurante (ej: pena-betica)" },
+                  "nombre": { "type": "string", "description": "Nombre del cliente" },
+                  "personas": { "type": "integer", "description": "Número de personas" },
+                  "fecha": { "type": "string", "description": "Fecha en formato YYYY-MM-DD", "example": "2026-06-15" },
+                  "turno": { "type": "string", "enum": ["comida", "cena"], "description": "Turno del servicio" },
+                  "hora": { "type": "string", "description": "Hora de la reserva (ej: 14:30)", "example": "14:30" },
+                  "telefono": { "type": "string", "description": "Teléfono de contacto" },
+                  "email": { "type": "string", "format": "email", "description": "Email para confirmación" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado de la reserva",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "mensaje": { "type": "string", "description": "'Reserva confirmada' o 'No hay mesas disponibles'" },
+                    "mesasLibres": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Faltan campos requeridos" },
+          "500": { "description": "Error interno" }
+        }
+      }
+    },
+    "/api/disponibilidad": {
+      "get": {
+        "operationId": "consultarDisponibilidad",
+        "summary": "Consultar disponibilidad de mesas para una fecha y turno",
+        "parameters": [
+          { "name": "restauranteId", "in": "query", "required": true, "schema": { "type": "string" }, "description": "ID del restaurante" },
+          { "name": "fecha", "in": "query", "required": true, "schema": { "type": "string" }, "description": "Fecha en formato YYYY-MM-DD", "example": "2026-06-15" },
+          { "name": "turno", "in": "query", "required": true, "schema": { "type": "string", "enum": ["comida", "cena"] }, "description": "Turno a consultar" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Disponibilidad",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "disponible": { "type": "boolean", "description": "true si hay mesas libres" },
+                    "mesasLibres": { "type": "integer", "description": "Número de mesas disponibles" },
+                    "mesasOcupadas": { "type": "integer" },
+                    "total": { "type": "integer", "description": "Total de mesas gestionadas (18)" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Faltan parámetros" }
+        }
+      }
+    }
+  }
+}

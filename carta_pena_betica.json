@@ -1,0 +1,248 @@
+{
+  "restauranteId": "pena-betica",
+  "categorias": [
+    {
+      "id": "ensaladas",
+      "nombre": "Ensaladas y Poke Bowls",
+      "items": [
+        {"nombre": "Poke bowl de salmón", "precio": 12.00, "alergenos": "Pescado, Mostaza"},
+        {"nombre": "Timbal de tataki de salmón", "precio": 7.50, "alergenos": "Gluten, Pescado, Mostaza, Leche"},
+        {"nombre": "Ensalada de la casa", "precio": 12.00, "alergenos": "Frutos de cáscara, Leche"},
+        {"nombre": "Ensalada césar (media)", "precio": 6.00, "alergenos": ""},
+        {"nombre": "Ensalada césar (ración)", "precio": 12.00, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "entrantes_frios",
+      "nombre": "Entrantes Fríos y Tapas",
+      "items": [
+        {"nombre": "Ensaladilla de gambas (tapa)", "precio": 3.90, "alergenos": "Gluten, Pescado, Moluscos"},
+        {"nombre": "Ensaladilla de gambas (ración)", "precio": 8.00, "alergenos": "Gluten, Pescado, Moluscos"},
+        {"nombre": "Tomate aliñado (media)", "precio": 4.50, "alergenos": "Pescado"},
+        {"nombre": "Tomate aliñado (ración)", "precio": 7.00, "alergenos": "Pescado"}
+      ]
+    },
+    {
+      "id": "croquetas",
+      "nombre": "Croquetas",
+      "items": [
+        {"nombre": "Croquetas de jamón ibérico de bellota (tapa)", "precio": 4.50, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croquetas de jamón ibérico de bellota (ración)", "precio": 12.00, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croquetas de queso de cabra (tapa)", "precio": 4.50, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croquetas de queso de cabra (ración)", "precio": 12.00, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croquetas de rabo de toro (tapa)", "precio": 4.50, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croquetas de rabo de toro (ración)", "precio": 12.00, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croqueta de caña de lomo (tapa)", "precio": 4.50, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Croqueta de caña de lomo (ración)", "precio": 15.00, "alergenos": "Gluten, Huevos, Leche"},
+        {"nombre": "Atún con wasabi suave (tapa)", "precio": 4.50, "alergenos": "Gluten"},
+        {"nombre": "Croquetas de la casa picante (tapa)", "precio": 4.50, "alergenos": "Gluten"},
+        {"nombre": "Surtido de croquetas (ración)", "precio": 12.00, "alergenos": "Consultar"}
+      ]
+    },
+    {
+      "id": "entrantes_especiales",
+      "nombre": "Recomendaciones del Chef y Entrantes Especiales",
+      "items": [
+        {"nombre": "Lagrimitas de chipirón (tapa)", "precio": 4.50, "alergenos": "Gluten, Crustáceos, Pescado, Huevos, Moluscos"},
+        {"nombre": "Lagrimitas de chipirón (media)", "precio": 12.00, "alergenos": "Gluten, Crustáceos, Pescado, Huevos, Moluscos"},
+        {"nombre": "Provolone (ración)", "precio": 12.00, "alergenos": ""},
+        {"nombre": "Rulo de cabra con cebolla caramelizada (tapa)", "precio": 5.50, "alergenos": ""},
+        {"nombre": "Rulo de cabra con cebolla caramelizada (ración)", "precio": 12.00, "alergenos": ""},
+        {"nombre": "Presa ibérica de bellota tartufata (tapa)", "precio": 5.90, "alergenos": "Gluten, Leche"},
+        {"nombre": "Boñuelo de gamba cristal con wakame (tapa)", "precio": 4.20, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Corazón de alcachofa (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Piruleta Thai (tapa)", "precio": 4.50, "alergenos": "Gluten, Frutos de cáscara, Crustáceos, Pescado, Moluscos"}
+      ]
+    },
+    {
+      "id": "gyozas_rolls",
+      "nombre": "Gyozas, Rolls y Nachos",
+      "items": [
+        {"nombre": "Surtido de gyozas (unidad)", "precio": 1.50, "alergenos": "Consultar"},
+        {"nombre": "Rolls de pollo con queso (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Gyozas de papada ibérica sobre salsa trufada (tapa)", "precio": 5.95, "alergenos": ""},
+        {"nombre": "Gyozas de papada ibérica sobre salsa trufada (ración)", "precio": 12.00, "alergenos": ""},
+        {"nombre": "Gyozas de langostinos", "precio": 5.95, "alergenos": ""},
+        {"nombre": "Gyozas de chipirón con alioli (tapa)", "precio": 5.95, "alergenos": ""},
+        {"nombre": "Nachos rellenos (tapa)", "precio": 6.50, "alergenos": ""},
+        {"nombre": "Nachos a los 3 quesos con jalapeños", "precio": 12.00, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "panes",
+      "nombre": "Panes y Bocadillos Gourmet",
+      "items": [
+        {"nombre": "Pan de cremíssima de langostinos", "precio": 14.00, "alergenos": "Gluten, Crustáceos, Huevos, Leche, Moluscos"},
+        {"nombre": "Pan César", "precio": 14.00, "alergenos": "Gluten"},
+        {"nombre": "Pan de lomo mechado y mojo picón", "precio": 12.00, "alergenos": "Gluten, Frutos de cáscara"},
+        {"nombre": "Pan de bacalao sobre cama de guacamole", "precio": 12.00, "alergenos": "Gluten, Pescado, Mostaza"},
+        {"nombre": "Pan de alioli y angulas al ajillo", "precio": 12.00, "alergenos": "Gluten, Crustáceos, Moluscos"},
+        {"nombre": "Pan de jamón con aceite y tomate natural", "precio": 12.00, "alergenos": "Gluten"}
+      ]
+    },
+    {
+      "id": "revueltos",
+      "nombre": "Revueltos",
+      "items": [
+        {"nombre": "Chanquetes fritos con pimientos y huevos (media)", "precio": 15.00, "alergenos": "Gluten, Pescado, Huevos"},
+        {"nombre": "Revuelto de bacalao dorado (ración)", "precio": 12.00, "alergenos": "Pescado"},
+        {"nombre": "Revuelto campero (ración)", "precio": 12.00, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "pizzas_hamburguesas",
+      "nombre": "Pizzas y Hamburguesas",
+      "items": [
+        {"nombre": "Hamburguesa Ibérica", "precio": 12.95, "alergenos": "Mostaza, Leche, Sulfitos"},
+        {"nombre": "Hamburguesa Iglesias", "precio": 12.95, "alergenos": "Gluten, Mostaza, Leche, Sulfitos"},
+        {"nombre": "Hamburguesa Americana", "precio": 11.95, "alergenos": "Mostaza, Sulfitos"},
+        {"nombre": "Hamburguesa de la Casa", "precio": 11.95, "alergenos": "Gluten, Mostaza, Leche, Sulfitos"},
+        {"nombre": "Pizza Quattro Formaggi", "precio": 12.50, "alergenos": "Gluten, Leche"},
+        {"nombre": "Pizza Calabrese Piccante", "precio": 12.50, "alergenos": "Gluten, Leche"},
+        {"nombre": "Pizza Speciale", "precio": 13.50, "alergenos": "Gluten, Leche"},
+        {"nombre": "Pizza Tonno", "precio": 12.00, "alergenos": "Gluten, Pescado, Leche"},
+        {"nombre": "Pizza de Verduras a la Parrilla", "precio": 14.00, "alergenos": "Gluten"},
+        {"nombre": "Pizza Mexicana", "precio": 14.00, "alergenos": "Gluten"},
+        {"nombre": "Pizza Prosciutto", "precio": 13.00, "alergenos": "Gluten, Leche"}
+      ]
+    },
+    {
+      "id": "pastas",
+      "nombre": "Pastas",
+      "items": [
+        {"nombre": "Espaguetis (tapa)", "precio": 4.50, "alergenos": "Gluten, Huevos"},
+        {"nombre": "Espaguetis (ración)", "precio": 12.00, "alergenos": "Gluten, Huevos"},
+        {"nombre": "Tagliatelle fresco (tapa)", "precio": 4.70, "alergenos": "Gluten, Huevos"},
+        {"nombre": "Tagliatelle fresco (ración)", "precio": 13.00, "alergenos": "Gluten, Huevos"},
+        {"nombre": "Ñoquis de patata (tapa)", "precio": 4.90, "alergenos": "Gluten, Huevos"},
+        {"nombre": "Ñoquis de patata (ración)", "precio": 12.00, "alergenos": "Gluten, Huevos"},
+        {"nombre": "Sedali al ajio-olio con gambas (tapa)", "precio": 6.00, "alergenos": "Gluten, Crustáceos, Moluscos"},
+        {"nombre": "Sedali al ajio-olio con gambas (ración)", "precio": 12.00, "alergenos": "Gluten, Crustáceos, Moluscos"},
+        {"nombre": "Sédalis al pesto (tapa)", "precio": 6.00, "alergenos": "Gluten"},
+        {"nombre": "Sedalis curry masala (tapa)", "precio": 6.00, "alergenos": "Gluten"}
+      ]
+    },
+    {
+      "id": "arroces",
+      "nombre": "Arroces",
+      "items": [
+        {"nombre": "Risotto funghy e tartufo (tapa)", "precio": 5.95, "alergenos": "Frutos de cáscara, Leche"},
+        {"nombre": "Risotto a la carbonara (tapa)", "precio": 5.95, "alergenos": ""},
+        {"nombre": "Risotto a la carbonara (ración)", "precio": 11.50, "alergenos": ""},
+        {"nombre": "Paella solo domingos (tapa)", "precio": 4.00, "alergenos": "Crustáceos, Pescado"},
+        {"nombre": "Paella solo domingos (ración)", "precio": 9.00, "alergenos": "Crustáceos, Pescado"},
+        {"nombre": "Arroz blanco con tomate y salchichas (tapa)", "precio": 4.95, "alergenos": ""},
+        {"nombre": "Arroz blanco con tomate y salchichas (ración)", "precio": 9.00, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "patatas",
+      "nombre": "Patatas",
+      "items": [
+        {"nombre": "Patatas bravas (tapa)", "precio": 4.20, "alergenos": ""},
+        {"nombre": "Patatas bravas (ración)", "precio": 9.00, "alergenos": ""},
+        {"nombre": "Patatas chimichurri (tapa)", "precio": 4.20, "alergenos": ""},
+        {"nombre": "Patatas chimichurri (ración)", "precio": 9.00, "alergenos": ""},
+        {"nombre": "Patatas roquefort (tapa)", "precio": 4.20, "alergenos": ""},
+        {"nombre": "Patatas roquefort (ración)", "precio": 9.00, "alergenos": ""},
+        {"nombre": "Patatas ali-oli (tapa)", "precio": 4.20, "alergenos": ""},
+        {"nombre": "Patatas ali-oli (ración)", "precio": 9.00, "alergenos": ""},
+        {"nombre": "Patatas carbonara (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Patatas carbonara (ración)", "precio": 10.00, "alergenos": ""},
+        {"nombre": "Patatas salsa americana (tapa)", "precio": 4.20, "alergenos": ""},
+        {"nombre": "Patatas salsa americana (ración)", "precio": 9.00, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "fritos_marinos",
+      "nombre": "Fritos y Tapas Marinas",
+      "items": [
+        {"nombre": "Twister de langostinos", "precio": 4.50, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Lagrimitas de pollo con alioli (tapa)", "precio": 4.00, "alergenos": "Gluten"},
+        {"nombre": "Lagrimitas de pollo con alioli (ración)", "precio": 8.00, "alergenos": "Gluten"},
+        {"nombre": "Gabardinas de gambas (tapa)", "precio": 4.20, "alergenos": "Gluten, Pescado, Huevos"},
+        {"nombre": "Gabardinas de gambas (ración)", "precio": 12.00, "alergenos": "Gluten, Pescado, Huevos"},
+        {"nombre": "Calamares del campo (ración)", "precio": 12.00, "alergenos": "Gluten, Crustáceos, Pescado, Huevos, Moluscos"},
+        {"nombre": "Chocos (tapa)", "precio": 4.20, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Chocos (media)", "precio": 10.00, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Adobo (tapa)", "precio": 4.20, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Adobo (media)", "precio": 10.00, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Bastones de berenjenas con miel (tapa)", "precio": 4.80, "alergenos": "Gluten"},
+        {"nombre": "Bastones de berenjenas con miel (ración)", "precio": 12.00, "alergenos": "Gluten"},
+        {"nombre": "Merluza frita (tapa)", "precio": 3.80, "alergenos": "Gluten, Pescado"},
+        {"nombre": "Merluza frita (media)", "precio": 9.00, "alergenos": "Gluten, Pescado"}
+      ]
+    },
+    {
+      "id": "carnes",
+      "nombre": "Carnes",
+      "items": [
+        {"nombre": "Tataki de wagyu", "precio": 19.00, "alergenos": "Frutos de cáscara"},
+        {"nombre": "Costillas asadas", "precio": 21.00, "alergenos": ""},
+        {"nombre": "Presa ibérica de bellota (ración)", "precio": 19.00, "alergenos": ""},
+        {"nombre": "Presa ibérica a la piedra", "precio": 9.00, "alergenos": ""},
+        {"nombre": "Vaca lurra a la piedra", "precio": 9.00, "alergenos": ""},
+        {"nombre": "Entrecot a la pimienta verde (ración)", "precio": 28.00, "alergenos": ""},
+        {"nombre": "Entrecot de vaca extra OKELAN", "precio": 28.00, "alergenos": ""},
+        {"nombre": "Carrilleras al vino tinto (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Carrilleras al vino tinto (ración)", "precio": 12.00, "alergenos": ""},
+        {"nombre": "Cola de toro (ración)", "precio": 18.00, "alergenos": ""},
+        {"nombre": "Pinchito de pollo (unidad)", "precio": 2.50, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "pechugas",
+      "nombre": "Pechugas de Pollo",
+      "items": [
+        {"nombre": "Pechuga de pollo a la plancha (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Pechuga de pollo a la plancha (ración)", "precio": 12.00, "alergenos": ""},
+        {"nombre": "Pechuga al roquefort (tapa)", "precio": 4.50, "alergenos": "Leche"},
+        {"nombre": "Pechuga al roquefort (ración)", "precio": 13.00, "alergenos": "Leche"},
+        {"nombre": "Pechuga a la carbonara (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Pechuga a la carbonara (ración)", "precio": 13.00, "alergenos": ""},
+        {"nombre": "Pechuga con salsa de almendras (tapa)", "precio": 4.50, "alergenos": "Frutos de cáscara"},
+        {"nombre": "Pechuga con salsa de almendras (ración)", "precio": 13.00, "alergenos": "Frutos de cáscara"},
+        {"nombre": "Pechuga al whisky (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Pechuga al whisky (ración)", "precio": 13.00, "alergenos": ""},
+        {"nombre": "Pechuga a la pimienta verde (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Pechuga a la pimienta verde (ración)", "precio": 13.00, "alergenos": ""},
+        {"nombre": "Pechuga al strogonoff (tapa)", "precio": 4.50, "alergenos": "Leche"},
+        {"nombre": "Pechuga al strogonoff (ración)", "precio": 13.00, "alergenos": "Leche"}
+      ]
+    },
+    {
+      "id": "solomillos",
+      "nombre": "Solomillos",
+      "items": [
+        {"nombre": "Solomillo al whisky (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Solomillo al whisky (ración)", "precio": 13.00, "alergenos": ""},
+        {"nombre": "Solomillo al roquefort (tapa)", "precio": 4.50, "alergenos": "Leche"},
+        {"nombre": "Solomillo al roquefort (ración)", "precio": 13.00, "alergenos": "Leche"},
+        {"nombre": "Solomillo a la pimienta (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Solomillo a la pimienta (ración)", "precio": 13.00, "alergenos": ""},
+        {"nombre": "Solomillo al strogonoff (tapa)", "precio": 4.50, "alergenos": "Leche"},
+        {"nombre": "Solomillo al strogonoff (ración)", "precio": 13.00, "alergenos": "Leche"},
+        {"nombre": "Solomillo Pedro Ximénez (tapa)", "precio": 4.50, "alergenos": ""},
+        {"nombre": "Solomillo Pedro Ximénez (ración)", "precio": 13.00, "alergenos": ""},
+        {"nombre": "Serranito de pollo", "precio": 7.95, "alergenos": ""},
+        {"nombre": "Serranito de solomillo o presa", "precio": 11.00, "alergenos": ""}
+      ]
+    },
+    {
+      "id": "pescados_plancha",
+      "nombre": "Pescados a la Plancha y Delicias del Mar",
+      "items": [
+        {"nombre": "Semifrío de calamar con alioli negro (tapa)", "precio": 5.50, "alergenos": "Gluten, Pescado, Huevos"},
+        {"nombre": "Semifrío de calamar con alioli negro (ración)", "precio": 15.00, "alergenos": "Gluten, Pescado, Huevos"},
+        {"nombre": "Gambas al ajillo (tapa)", "precio": 4.50, "alergenos": "Crustáceos, Moluscos"},
+        {"nombre": "Gambas al ajillo (ración)", "precio": 15.00, "alergenos": "Crustáceos, Moluscos"},
+        {"nombre": "Pulpo a la brasa con pimentón de la Vera", "precio": 18.00, "alergenos": "Crustáceos, Pescado"},
+        {"nombre": "Calamar a la plancha (tapa)", "precio": 4.90, "alergenos": "Pescado"},
+        {"nombre": "Pez espada a la plancha (ración)", "precio": 15.00, "alergenos": "Pescado"},
+        {"nombre": "Lomo de merluza a la plancha (tapa)", "precio": 6.00, "alergenos": "Pescado"},
+        {"nombre": "Lomo de merluza a la plancha (ración)", "precio": 12.00, "alergenos": "Pescado"},
+        {"nombre": "Merluza con angulas y gambas (ración)", "precio": 7.50, "alergenos": ""}
+      ]
+    }
+  ]
+}

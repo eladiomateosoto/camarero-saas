@@ -6,6 +6,9 @@ import Login from "./pages/Login";
 import Panel from "./pages/Panel";
 import Mesa from "./pages/Mesa";
 import Admin from "./pages/Admin";
+import Estadisticas from "./pages/Estadisticas";
+import Historico from "./pages/Historico";
+import Carta from "./pages/Carta";
 
 function ProtectedRoute({ children }) {
   const [user, setUser] = useState(undefined);
@@ -55,6 +58,30 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Admin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/estadisticas"
+          element={
+            <ProtectedRoute>
+              <Estadisticas />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/historico"
+          element={
+            <ProtectedRoute>
+              <Historico />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/carta"
+          element={
+            <ProtectedRoute>
+              <Carta />
             </ProtectedRoute>
           }
         />

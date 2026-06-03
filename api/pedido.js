@@ -81,7 +81,7 @@ export default async function handler(req, res) {
       });
     }
 
-    await mesaRef.collection("comandas").add({ items, total, creadaEn: ahora });
+    await mesaRef.collection("comandas").add({ items, total, creadaEn: ahora, estado: "pendiente" });
     console.log("[pedido] Comanda guardada en Firestore");
 
     if (telegramToken && telegramChatId) {
