@@ -28,10 +28,9 @@ export default async function handler(req, res) {
       .where("fecha", "==", fecha)
       .get();
 
-    const activas = snap.docs.filter((d) => {
-      const data = d.data();
-      return data.turno === turno && !["cancelada", "no_presentado"].includes(data.estado);
-    });
+    const activas = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(d => d.turno === turno && !["cancelada", "no_presentado"].includes(d.estado));
 
     const ocupadas = activas.length;
     const libres = Math.max(0, MAX_MESAS - ocupadas);
@@ -42,6 +41,14 @@ export default async function handler(req, res) {
       mesasLibres: libres,
       mesasOcupadas: ocupadas,
       total: MAX_MESAS,
+      reservas: activas.map(r => ({
+        id: r.id,
+        nombre: r.nombre,
+        hora: r.hora,
+        personas: r.personas,
+        estado: r.estado,
+        mesaAsignada: r.mesaAsignada || null,
+      })),
     });
   } catch (err) {
     console.error("[disponibilidad] ERROR:", err.message);
