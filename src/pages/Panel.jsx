@@ -367,6 +367,7 @@ export default function Panel() {
   const [pendientes, setPendientes] = useState([]);
   const [carta, setCarta] = useState(null);
   const [reservas, setReservas] = useState([]);
+  const [reservasHoy, setReservasHoy] = useState([]);
   const [tab, setTab] = useState("mesas");
   const [turnoMesas, setTurnoMesas] = useState("comida");
   const [fechaFiltro, setFechaFiltro] = useState(TODAY());
@@ -421,6 +422,7 @@ export default function Panel() {
     return () => unsubs.forEach(u => u());
   }, [user, mesas]);
 
+  // Reservas para la fecha/turno seleccionados en el filtro (pestaña Reservas)
   useEffect(() => {
     if (!user) return;
     const q = query(collection(db, "restaurantes", RESTAURANTE_ID, "reservas"), where("fecha", "==", fechaFiltro));
@@ -430,6 +432,21 @@ export default function Panel() {
       setReservas(lista);
     });
   }, [user, fechaFiltro]);
+
+  // Reservas de HOY — siempre el día actual, para el overlay azul en pestaña Mesas
+  useEffect(() => {
+    if (!user) return;
+    const hoy = TODAY();
+    // Si el filtro ya apunta a hoy, reusar el listener de reservas
+    if (fechaFiltro === hoy) {
+      setReservasHoy(reservas);
+      return;
+    }
+    const q = query(collection(db, "restaurantes", RESTAURANTE_ID, "reservas"), where("fecha", "==", hoy));
+    return onSnapshot(q, snap => {
+      setReservasHoy(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+  }, [user, fechaFiltro, reservas]);
 
   function playBeep() {
     try {
@@ -488,31 +505,53 @@ export default function Panel() {
   const numMesas = restaurante?.numMesas || 20;
   const numerosArray = Array.from({ length: numMesas }, (_, i) => i + 1);
 
-  // Mesas con reserva asignada para el turno seleccionado en la pestaña mesas
+  // Overlay azul en pestaña Mesas: siempre basado en reservasHoy (no en fechaFiltro)
   const mesasConReservaTurno = new Set(
-    fechaFiltro === TODAY()
-      ? reservas.filter(r => r.turno === turnoMesas && r.mesaAsignada && !["cancelada", "no_presentado", "en_local"].includes(r.estado)).map(r => String(r.mesaAsignada))
-      : []
+    reservasHoy
+      .filter(r => r.turno === turnoMesas && r.mesaAsignada && !["cancelada", "no_presentado", "en_local"].includes(r.estado))
+      .map(r => String(r.mesaAsignada))
   );
 
   // Reservas filtradas para pestaña reservas
   const reservasMostradas = reservas.filter(r =>
     (turnoFiltro === "todos" || r.turno === turnoFiltro) && r.estado !== "cancelada"
   );
-  const reservasActivas = reservas.filter(r => !["cancelada", "no_presentado"].includes(r.estado));
-  const reservasLibres = Math.max(0, 18 - reservasActivas.filter(r => turnoFiltro !== "todos" ? r.turno === turnoFiltro : true).length);
 
-  // Color para el grid de mesas en pestaña reservas
+  // Contador por turno: solo tiene sentido calcular mesas libres para un turno concreto
+  const contadorReservas = (() => {
+    const esHoy = fechaFiltro === TODAY();
+    if (turnoFiltro === "todos") {
+      const nComida = reservas.filter(r => r.turno === "comida" && !["cancelada", "no_presentado"].includes(r.estado)).length;
+      const nCena   = reservas.filter(r => r.turno === "cena"   && !["cancelada", "no_presentado"].includes(r.estado)).length;
+      if (nComida === 0 && nCena === 0) return "0 reservas";
+      const partes = [];
+      if (nComida > 0) partes.push(`${nComida} comida`);
+      if (nCena > 0)   partes.push(`${nCena} cena`);
+      return partes.join(" · ");
+    }
+    const n = reservas.filter(r => r.turno === turnoFiltro && !["cancelada", "no_presentado"].includes(r.estado)).length;
+    const libres = Math.max(0, 18 - n);
+    return `${n} reserva${n !== 1 ? "s" : ""} · ${libres} mesa${libres !== 1 ? "s" : ""} libre${libres !== 1 ? "s" : ""}`;
+  })();
+
+  // Color del grid de mesas en pestaña Reservas
   function colorMesaReservas(num) {
     const id = String(num);
     const m = mesas[id];
-    if (m?.estado === "ocupada" || m?.estado === "pagando") return "ocupada";
+    const esHoy = fechaFiltro === TODAY();
+
+    // Naranja solo para el día actual y mesa ocupada en tiempo real
+    if (esHoy && (m?.estado === "ocupada" || m?.estado === "pagando")) return "ocupada";
+
+    // Azul si tiene reserva para la fecha+turno seleccionados
+    const turnosAComprobar = turnoFiltro === "todos" ? ["comida", "cena"] : [turnoFiltro];
     const tieneReserva = reservas.some(r =>
       String(r.mesaAsignada) === id &&
-      (turnoFiltro === "todos" || r.turno === turnoFiltro) &&
+      turnosAComprobar.includes(r.turno) &&
       !["cancelada", "no_presentado"].includes(r.estado)
     );
     if (tieneReserva) return "reservada";
+
     return "libre";
   }
 
@@ -623,9 +662,7 @@ export default function Panel() {
                     className="px-3 py-1.5 rounded-full text-white text-xs font-medium hover:opacity-90">{label}</button>
                 ))}
               </div>
-              <span className="text-slate-400 text-sm ml-auto">
-                {reservasMostradas.filter(r => r.estado !== "no_presentado").length} reservas · {turnoFiltro !== "todos" ? `${reservasLibres} mesas libres` : ""}
-              </span>
+              <span className="text-slate-400 text-sm ml-auto">{contadorReservas}</span>
               <button onClick={() => setModalNuevaReserva({ mesaNumero: null })} style={{ backgroundColor: "#16a34a" }} className="px-4 py-2 rounded-lg text-white text-sm font-semibold hover:opacity-90">+ Nueva reserva</button>
             </div>
 
